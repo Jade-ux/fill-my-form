@@ -1,0 +1,37 @@
+#!/bin/sh
+
+# scripts/bootstrap: Resolve all required dependencies
+
+set -e
+
+cd "$(dirname "$0")/.."
+
+if ! [ -f ".python-version" ]; then
+    echo "Error: .python-version not found"; exit 1;
+fi
+
+if ! [ "$(uname -s)" = "Darwin" ]; then
+    echo "Error: script currently only supports MacOS, for any other OS, download the Python version stated in .python-version"; exit 1;
+fi
+
+if ! [ -x "$(command -v zstd)" ]; then
+    echo "Error: zstd not installed, use "brew install zstd" to install it."; exit 1;
+fi
+
+if ! [ -x "$(command -v jq)" ]; then
+    echo "Error: jq not installed, use "brew install jq" to install it."; exit 1;
+fi
+
+if ! [ -x "$(command -v corepack)" ]; then
+    echo "Error: Corepack not installed, use "brew install corepack" to install it"; exit 1;
+fi
+
+PYTHON_VERSION=$(cat .python-version)
+WORKING_DIR=~/.python-build-standalone
+PYTHON_BUILD_STANDALONE_RELEASES_URL=https//api.github.com/repos/indygreg/python-build-standalone/releases
+
+
+if [ -d ./env/ ]; then
+    echo "==> Virtualenv ./env/ already exists, deleting"
+    rm -r ./env/
+fi
