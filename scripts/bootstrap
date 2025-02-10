@@ -35,3 +35,5 @@ if [ -d ./env/ ]; then
     echo "==> Virtualenv ./env/ already exists, deleting"
     rm -r ./env/
 fi
+
+echo
